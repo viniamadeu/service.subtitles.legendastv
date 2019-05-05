@@ -1,3 +1,7 @@
+2.4.1
+- Add: Automatic installation of LibArchive addon (henricos)
+- Fix: Fixed file extraction (henricos)
+
 2.4.0
 - Fix: Use RAR Archive support addon on Kodi 18 (Leia) (henricos)
 - Fix: handling non-ascii content on log method (ecsousa)
