@@ -192,14 +192,34 @@ def isStacked(subA, subB):
                     return True
     return False
 
-def extractArchiveToFolder(archive, ext, destFolder):
-    archiveURL = urllib.quote_plus(archive)
-    if ext == 'rar':
-        archiveURL = 'rar://' + archiveURL
+# based on extract_all_libarchive by @zachmorris
+def extractArchiveToFolder(archive_file, directory_to):
+    overall_success = True
+    files_out = list()
+    if 'archive://' in archive_file:
+        archive_path = archive_file
     else:
-        archiveURL = 'zip://' + archiveURL
-    dirs, files = xbmcvfs.listdir(archiveURL)
-    for file in files:
-        src = archiveURL + '/' + file
-        dest = destFolder + '/' + file
-        xbmcvfs.copy(src, dest)
+        archive_path = 'archive://%(archive_file)s' % {'archive_file': urllib.quote(xbmc.translatePath(archive_file))}
+    dirs_in_archive, files_in_archive = xbmcvfs.listdir(archive_path)	
+    for ff in files_in_archive:
+        file_from = os.path.join(archive_path,ff).replace('\\','/') #Windows unexpectedly requires a forward slash in the path
+        success = xbmcvfs.copy(file_from, os.path.join(xbmc.translatePath(directory_to),ff))
+        if not success:
+            log('Error extracting file %(ff)s from archive %(archive_file)s' % {'ff': ff,'archive_file':archive_file})
+            overall_success = False
+        else:
+            log('Extracted file %(ff)s from archive %(archive_file)s' % {'ff': ff,'archive_file':archive_file})
+            files_out.append(os.path.join(xbmc.translatePath(directory_to),ff))
+    for dd in dirs_in_archive:
+        if xbmcvfs.mkdir(os.path.join(directory_to, dd)):
+            log('Created folder %(dd)s for archive %(archive_file)s' % {'dd': os.path.join(directory_to, dd, ''),'archive_file':archive_file})
+            files_out2, success2 = extractArchiveToFolder(os.path.join(archive_path,dd,'').replace('\\','/'),os.path.join(directory_to,dd))
+            if success2:
+                files_out = files_out + files_out2
+            else:
+                overall_success = False
+        else:
+            overall_success = False
+            log('Unable to create the folder %(dir_from)s for libarchive extraction' % {'dir_from': os.path.join(xbmc.translatePath(directory_to),dd)})
+    return files_out, overall_success
+

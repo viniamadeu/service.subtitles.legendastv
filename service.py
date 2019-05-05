@@ -120,9 +120,10 @@ def Download(url, filename, pack, language): #standard input
 
     with open(fname,'wb') as f: f.write(FileContent)
 
-    archiveURL = "%s%s" % ( ('rar://' if FileExt == "rar" else 'zip://'), urllib.quote_plus(fname))
-    files = xbmc_walk(archiveURL);
+    extractedFileList, success = extractArchiveToFolder(fname, extractPath)
     
+    files = xbmc_walk(extractPath)
+
     temp = []
     for file in files:
         sub = urllib.unquote_plus(file)
