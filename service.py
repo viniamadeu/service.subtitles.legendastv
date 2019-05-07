@@ -112,11 +112,13 @@ def Download(url, filename, pack, language): #standard input
     random      = uuid.uuid4().hex
     extractPath = os.path.join(__temp__, "Extracted")
     
-    cleanDirectory(extractPath)
+    cleanDirectory(__temp__)
+    if not xbmcvfs.exists(extractPath):
+        xbmcvfs.mkdirs(extractPath)
 
     FileContent, FileExt = LTV.Download(url)
 
-    fname = "%s.%s" % ( os.path.join(extractPath, random), FileExt )
+    fname = "%s.%s" % ( os.path.join(__temp__, random), FileExt )
 
     with open(fname,'wb') as f: f.write(FileContent)
 
@@ -137,10 +139,9 @@ def Download(url, filename, pack, language): #standard input
 
     if len(subtitles) > 1:
         if pack:
-            subtitles.append(["pack", "pack", __language__( 32010 )])
+            subtitles.append(["pack", "pack", __language__( 32010 ), ""])
         dialog = xbmcgui.Dialog()
-        sel = dialog.select("%s\n%s" % (__language__( 32001 ).encode("utf-8"), filename ) ,
-                             [y for v, x, y, z in subtitles])
+        sel = dialog.select("%s\n%s" % (__language__( 32001 ).encode("utf-8"), filename), [os.path.basename(b) for a, b, c, d in subtitles])
         if sel >= 0:
             subSelected = subtitles[sel][1]
 
@@ -166,6 +167,7 @@ def Download(url, filename, pack, language): #standard input
             xbmcvfs.copy(subSelected, temp_sel)
             outputSub.append(temp_sel)
     elif len(subtitles) == 1: 
+        subSelected = subtitles[0][1]
         temp_sel    = os.path.join(extractPath, "%s.%s" % (random, subtitles[0][3]))
         xbmcvfs.copy(subSelected, temp_sel)
         outputSub.append(temp_sel)
