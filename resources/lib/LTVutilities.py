@@ -66,9 +66,9 @@ def cleanDirectory(directory):
         for f in files:
           file = os.path.join(root, f)
           xbmcvfs.delete(file)
-      for d in dirs:
-        dir = os.path.join(root, d)
-        xbmcvfs.rmdir(dir)
+        for d in dirs:
+          dir = os.path.join(root, d)
+          xbmcvfs.rmdir(dir)
   except:
     pass
     
