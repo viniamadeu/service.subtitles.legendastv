@@ -193,33 +193,65 @@ def isStacked(subA, subB):
     return False
 
 # based on extract_all_libarchive by @zachmorris
-def extractArchiveToFolder(archive_file, directory_to):
+def extractArchiveToFolder(translated_archive_url, extract_to_dir):
     overall_success = True
     files_out = list()
-    if 'archive://' in archive_file:
-        archive_path = archive_file
-    else:
-        archive_path = 'archive://%(archive_file)s' % {'archive_file': urllib.quote(xbmc.translatePath(archive_file))}
-    dirs_in_archive, files_in_archive = xbmcvfs.listdir(archive_path)	
+
+    log('-----------------------------------------------------------')
+    log('---- Extracting archive URL: %s' % translated_archive_url)
+    log('---- To directory: %s' % extract_to_dir)
+    
+    log('---- Calling xbmcvfs.listdir...')
+    dirs_in_archive, files_in_archive = xbmcvfs.listdir(translated_archive_url)	
+
     for ff in files_in_archive:
-        file_from = os.path.join(archive_path,ff).replace('\\','/') #Windows unexpectedly requires a forward slash in the path
-        success = xbmcvfs.copy(file_from, os.path.join(xbmc.translatePath(directory_to),ff))
-        if not success:
-            log('Error extracting file %(ff)s from archive %(archive_file)s' % {'ff': ff,'archive_file':archive_file})
+
+        log('---- File found in archive: %s' % ff)
+
+        url_from = os.path.join(translated_archive_url, ff).replace('\\','/') 
+        log('---- URL from: %s' % url_from)
+
+        file_to = os.path.join(xbmc.translatePath(extract_to_dir), ff)
+        log('---- File to: %s' % file_to) 
+
+        log('---- Calling xbmcvfs.copy...')
+        copy_success = xbmcvfs.copy(url_from, file_to)
+
+        if not copy_success:
+            log('---- Copy ERROR!!!!!')
             overall_success = False
         else:
-            log('Extracted file %(ff)s from archive %(archive_file)s' % {'ff': ff,'archive_file':archive_file})
-            files_out.append(os.path.join(xbmc.translatePath(directory_to),ff))
+            log('---- Copy OK')
+            files_out.append(file_to)
+
     for dd in dirs_in_archive:
-        if xbmcvfs.mkdir(os.path.join(directory_to, dd)):
-            log('Created folder %(dd)s for archive %(archive_file)s' % {'dd': os.path.join(directory_to, dd, ''),'archive_file':archive_file})
-            files_out2, success2 = extractArchiveToFolder(os.path.join(archive_path,dd,'').replace('\\','/'),os.path.join(directory_to,dd))
+
+        log('---- Directory found in archive: %s' % dd)
+        
+        dir_to_create = os.path.join(extract_to_dir, dd)
+        log('---- Directory to create: %s' % dir_to_create)
+        
+        log('---- Calling xbmcvfs.mkdir...')
+        mkdir_success = xbmcvfs.mkdir(dir_to_create)
+        
+        if mkdir_success:
+        
+            log('---- Mkdir OK')
+            
+            dir_inside_archive_url = translated_archive_url + '/' + dd + '/'
+            log('---- Directory inside archive URL: %s' % dir_inside_archive_url)
+            
+            log('---- Calling extractArchiveToFolder...')
+            files_out2, success2 = extractArchiveToFolder(dir_inside_archive_url, dir_to_create)
+            
             if success2:
                 files_out = files_out + files_out2
             else:
                 overall_success = False
+                
         else:
             overall_success = False
-            log('Unable to create the folder %(dir_from)s for libarchive extraction' % {'dir_from': os.path.join(xbmc.translatePath(directory_to),dd)})
+            log('---- Mkdir ERROR!!!!!')
+            
     return files_out, overall_success
 

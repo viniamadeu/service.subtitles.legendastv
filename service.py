@@ -122,7 +122,8 @@ def Download(url, filename, pack, language): #standard input
 
     with open(fname,'wb') as f: f.write(FileContent)
 
-    extractedFileList, success = extractArchiveToFolder(fname, extractPath)
+    translated_archive_url = 'archive://%s' % urllib.quote(xbmc.translatePath(fname))
+    extractedFileList, success = extractArchiveToFolder(translated_archive_url, extractPath)
     
     files = xbmc_walk(extractPath)
 
