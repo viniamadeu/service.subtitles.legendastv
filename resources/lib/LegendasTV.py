@@ -256,8 +256,8 @@ class LegendasTV:
         # Extend with the older version
         if not len(allResults):
             self.Log("Extending results...")
-            Response = self._urlopen("http://minister.legendas.tv/util/busca_titulo/" + urllib.quote_plus(SearchString)).read()
-            Response =  simplejson.loads(unicode(Response, 'utf-8', errors='ignore'))
+            Response = self._urlopen("http://minister.legendas.tv/util/busca_titulo/" + urllib.quote_plus(SearchString))
+            Response =  simplejson.loads(unicode(Response.read(), 'utf-8', errors='ignore'))
             # Load the results
             # Parse and filter the results
             self.Log("Message: Searching for movie/tvshow list with term(s): [%s]" % SearchString)
