@@ -1,3 +1,11 @@
+2.4.4
+- Use quote_plus to encode URL
+- Fix: 'str' object has no attribute 'read'
+
+2.4.3
+- Add: Lots of debug info
+- Rewrite extraction method
+
 2.4.2
 - Fix: Handling packs with multiple subtitles (henricos)
 - Fix: Download location on temp folder (henricos)
