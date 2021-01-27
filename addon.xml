@@ -3,24 +3,24 @@
    id="service.subtitles.legendastv"
    name="Legendas.TV"
    version="2.4.4"
-   provider-name="gfjardim">
+   provider-name="gfjardim,andrebrait">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="vfs.libarchive" version="1.0.5" />
   </requires>
   <extension point="xbmc.subtitle.module" library="service.py" />
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Legendas.TV</summary>
-    <description lang="en">Search and download subtitles from Legendas.TV</description>
-    <description lang="pt">Procura e baixa legendas de Legendas.TV</description>
-    <disclaimer lang="en">For bugs, requests or general questions visit the 'Subtitle add-on' subforum on the XBMC forum.</disclaimer>
-    <disclaimer lang="pt">Para bugs, pedidos ou perguntas visite o subfórum 'Subtitle add-on' no fórum oficial do XBMC.</disclaimer>
-    <language></language>
+    <summary lang="en_GB">Legendas.TV</summary>
+    <description lang="en_GB">Search and download subtitles from Legendas.TV</description>
+    <description lang="pt_PT">Procura e baixa legendas de Legendas.TV</description>
+    <disclaimer lang="en_GB">For bugs, requests or general questions visit the 'Subtitle add-on' subforum on the KODI forum.</disclaimer>
+    <disclaimer lang="pt_PT">Para bugs, pedidos ou perguntas visite o subfórum 'Subtitle add-on' no fórum oficial do KODI.</disclaimer>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 3.</license>
-    <forum></forum>
-    <website></website>
-    <email></email>
-    <source>https://github.com/gfjardim/service.subtitles.legendastv</source>
+    <license>GPL-3.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=360127</forum>
+    <source>https://github.com/andrebrait/service.subtitles.legendastv</source>
   </extension>
+  <assets>
+    <icon>icon.png</icon>
+  </assets>
 </addon>

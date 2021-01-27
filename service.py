@@ -15,8 +15,7 @@ import xbmcvfs
 import xbmcaddon
 import xbmcgui,xbmcplugin
 
-try: import simplejson as json
-except: import json
+import json
 
 __addon__      = xbmcaddon.Addon()
 __author__     = __addon__.getAddonInfo('author')
@@ -25,18 +24,15 @@ __scriptname__ = __addon__.getAddonInfo('name')
 __version__    = __addon__.getAddonInfo('version')
 __language__   = __addon__.getLocalizedString
 
-__cwd__        = xbmc.translatePath( __addon__.getAddonInfo('path') ).decode("utf-8")
 __profile__    = xbmc.translatePath( __addon__.getAddonInfo('profile') ).decode("utf-8")
-__resource__   = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' ) ).decode("utf-8")
 __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp', '') ).decode("utf-8")
 
-sys.path.append (__resource__)
 __search__   = __addon__.getSetting( 'SEARCH' )
 __username__ = __addon__.getSetting( 'USERNAME' )
 __password__ = __addon__.getSetting( 'PASSWORD' )
 
-from LTVutilities import log, cleanDirectory, isStacked, getMovieIMDB, getShowIMDB, getShowId, getTVShowOrginalTitle, getMovieOriginalTitle, safeFilename, extractArchiveToFolder
-from LegendasTV import *
+from .resources.lib.LTVutilities import log, cleanDirectory, isStacked, getMovieIMDB, getShowIMDB, getShowId, getTVShowOrginalTitle, getMovieOriginalTitle, safeFilename, extractArchiveToFolder
+from .resources.lib.LegendasTV import *
 
 LTV = LegendasTV()
 LTV.Log = log

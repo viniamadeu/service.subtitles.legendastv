@@ -22,10 +22,7 @@ import sys
 import time
 import urllib
 import urllib2
-if module_exists("simplejson"):
-    import simplejson
-else:
-    import json as simplejson
+import json
 
 # Service variables
 sub_ext = 'srt aas ssa sub smi'
@@ -221,7 +218,7 @@ class LegendasTV:
             for thread in self.RegThreads:
                 try:
                     # Try if thread result is a valid JSON string
-                    contents = simplejson.loads(unicode(thread.join().read(), 'utf-8', errors='ignore'))
+                    contents = json.loads(unicode(thread.join().read(), 'utf-8', errors='ignore'))
                     for content in contents:
                         JSONContent.append(content)
                 except:
@@ -229,7 +226,7 @@ class LegendasTV:
                     pass
 
         for R in JSONContent:
-            # print simplejson.dumps(R, sort_keys=True, indent=4, separators=(',', ': '))
+            # print json.dumps(R, sort_keys=True, indent=4, separators=(',', ': '))
             if R.has_key("_source"):
                 ContentID = R['_id']
                 # Continue if id already exists
@@ -257,7 +254,7 @@ class LegendasTV:
         if not len(allResults):
             self.Log("Extending results...")
             Response = self._urlopen("http://minister.legendas.tv/util/busca_titulo/" + urllib.quote_plus(SearchString))
-            Response =  simplejson.loads(unicode(Response.read(), 'utf-8', errors='ignore'))
+            Response =  json.loads(unicode(Response.read(), 'utf-8', errors='ignore'))
             # Load the results
             # Parse and filter the results
             self.Log("Message: Searching for movie/tvshow list with term(s): [%s]" % SearchString)

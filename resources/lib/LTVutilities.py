@@ -10,8 +10,7 @@ import unicodedata
 import urllib, urllib2
 import ssl
 
-try: import simplejson as json
-except: import json
+import json
 
 try:
     __scriptname__ = sys.modules[ "__main__" ].__scriptname__
