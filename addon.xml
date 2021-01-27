@@ -22,5 +22,6 @@
   </extension>
   <assets>
     <icon>icon.png</icon>
+    <clearlogo>logo.png</clearlogo>
   </assets>
 </addon>
