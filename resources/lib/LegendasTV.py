@@ -91,7 +91,7 @@ class LegendasTV:
         self.cookie = ""
     
     def Log(self, message, logtype = "NOTICE"):
-        print "####  %s: %s" % (logtype, message.encode("utf-8"))
+        print("####  %s: %s" % (logtype, message.encode("utf-8")))
         
     def _urlopen(self, request):
         try:
@@ -172,7 +172,7 @@ class LegendasTV:
         if not len(obj):
             return 0
         for key in keys.split():
-            if not obj[0].has_key(key):
+            if key not in obj[0]:
                 continue
             maximum = max(len(unicode(k[key])) for k in obj)
             maximum = max(maximum+2, len(key)+2)
@@ -182,7 +182,7 @@ class LegendasTV:
         for x, Result in enumerate(obj):
             Content = ""
             for key in keys.split():
-                if not obj[0].has_key(key):
+                if key not in obj[0]:
                     continue
                 value = unicode(Result[key])
                 if not len(value): continue
@@ -204,10 +204,10 @@ class LegendasTV:
         self.Log("Message: Searching for movie/tvshow list with term(s): [%s]" % SearchString)
 
         SearchElements = SearchString.split(" ")
-        for x in xrange(0,len(SearchElements)):
+        for x in range(0,len(SearchElements)):
             fromBegin = " ".join(SearchElements[:x])
             fromEnd   = " ".join(SearchElements[-x:])
-            # print "fromBegin[%s] fromEnd[%s]" % (fromBegin, fromEnd)
+            # print("fromBegin[%s] fromEnd[%s]" % (fromBegin, fromEnd))
             for search in [ fromBegin, fromEnd]:
                 if len(search):
                     url     = "http://legendas.tv/legenda/sugestao/" + urllib.quote_plus(search)
@@ -227,10 +227,10 @@ class LegendasTV:
 
         for R in JSONContent:
             # print json.dumps(R, sort_keys=True, indent=4, separators=(',', ': '))
-            if R.has_key("_source"):
+            if "_source" in R:
                 ContentID = R['_id']
                 # Continue if id already exists
-                if filter(lambda id: id['id'] == ContentID, discardedResults) or filter(lambda id: id['id'] == ContentID, allResults):
+                if [id for id in discardedResults if id['id'] == ContentID] or [id for id in allResults if id['id'] == ContentID]:
                     continue
                 Source    = R["_source"]
                 LTVSeason = Source["temporada"] if Source["tipo"] == "S" and Source["temporada"] else 0
@@ -260,7 +260,7 @@ class LegendasTV:
             self.Log("Message: Searching for movie/tvshow list with term(s): [%s]" % SearchString)
             for R in Response:
                 LTVSeason = 0
-                if R.has_key('Filme') and R['Filme'].has_key('dsc_nome'):
+                if 'Filme' in R and 'dsc_nome' in R['Filme']:
                     LTVTitle = self.CleanLTVTitle(R['Filme']['dsc_nome'])
                     TitleBR = R['Filme']['dsc_nome_br']
                     if re.findall(".*? - (\d{1,2}).*?emporada", TitleBR):
@@ -380,7 +380,7 @@ class LegendasTV:
         startTime = time.time()
         filteredResults, self.DownloadsResults, self.Languages = [], [], []
         Movie, TVShow, Year, Season, Episode, IMDB = "", "", 0, 0, 0, ""
-        for key, value in kargs.iteritems():
+        for key, value in kargs.items():
             if key == "title":             Movie   = self.CleanLTVTitle(value)
             if key == "tvshow":            TVShow  = self.CleanLTVTitle(value)
             if key == "year"    and value: Year    = int(value)

@@ -82,7 +82,7 @@ def Search(item):  # standard input
     
     if item['original_title'] != "true":
         listitem = xbmcgui.ListItem(label="", label2=__language__( 32011 ).encode("utf-8"), iconImage="", thumbnailImage="")
-        searchstring = "&searchstring=%s" % item['searchstring'] if item.has_key("searchstring") else ""
+        searchstring = "&searchstring=%s" % item['searchstring'] if "searchstring" in item else ""
         url = "plugin://%s/?action=search&original_title=true&languages=%s%s" % ( __scriptid__, 
                                                                                   urllib.quote(",".join(item["languages"])), 
                                                                                   urllib.quote(searchstring)
@@ -194,7 +194,7 @@ def enable_rar():
         q = '{"jsonrpc": "2.0", "method": "Addons.GetAddonDetails", "params": {"addonid": "vfs.rar", "properties": ["enabled"]}, "id": 0 }'
         r  = json.loads(xbmc.executeJSONRPC(q))
         log(xbmc.executeJSONRPC(q))
-        if r.has_key("result") and r["result"].has_key("addon"):
+        if "result" in r and "addon" in r["result"]:
             return r['result']["addon"]["enabled"]
         return True
 
@@ -221,7 +221,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
     item['file_original_path']  = urllib.unquote(xbmc.Player().getPlayingFile().decode('utf-8'))     # Full path of a playing file
     item['languages']           = [] #['scc','eng']
     item["languages"].extend(urllib.unquote(params['languages']).decode('utf-8').split(","))
-    item["original_title"]      = "true" if params.has_key("original_title") else "false"
+    item["original_title"]      = "true" if "original_title" in params else "false"
 
     if not item['title']:
         log( "VideoPlayer.OriginalTitle not found")        

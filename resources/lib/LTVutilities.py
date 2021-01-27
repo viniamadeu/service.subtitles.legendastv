@@ -96,7 +96,7 @@ def getShowIMDB():
             HTTPRequest  = urllib2.Request("https://api.thetvdb.com/series/%s" % ShowID, headers={'Authorization' : 'Bearer %s' % TheTVDBToken})
             HTTPResponse =  urllib2.urlopen(HTTPRequest).read()
             JSONContent  = json.loads(HTTPResponse)
-            if JSONContent.has_key("data"):
+            if "data" in JSONContent:
                 ShowIMDB = JSONContent['data']['imdbId']
                 log("getShowIMDB: got IMDB id ->%s<-" % ShowIMDB, "DEBUG")
                 return ShowIMDB
@@ -113,12 +113,12 @@ def getMovieIMDB():
         playerid       = json.loads(xbmc.executeJSONRPC(playerid_query))['result'][0]['playerid']
         movieid_query = '{"jsonrpc": "2.0", "method": "Player.GetItem", "params": {"playerid": ' + str(playerid) + ', "properties": ["imdbnumber", "title", "year"]}, "id": 1}'
         movieid       = json.loads(xbmc.executeJSONRPC (movieid_query))
-        # print json.dumps(movieid, sort_keys=True, indent=4, separators=(',', ': '))
+        # print(json.dumps(movieid, sort_keys=True, indent=4, separators=(',', ': ')))
   
-        if movieid['result']['item'].has_key("imdbnumber") and len(movieid['result']['item']["imdbnumber"]):
+        if "imdbnumber" in movieid['result']['item'] and len(movieid['result']['item']["imdbnumber"]):
             log("getMovieIMDB: IMDB id ->%s<- already on database." % movieid['result']['item']["imdbnumber"], "DEBUG" )
             return movieid['result']['item']["imdbnumber"]
-        elif movieid['result']['item'].has_key("title") and len(movieid['result']['item']["title"]):
+        elif "title" in movieid['result']['item'] and len(movieid['result']['item']["title"]):
             MovieTitle             = movieid['result']['item']["title"].encode("utf-8");
             Query                  = urllib.urlencode({"api_key" : TMDBApi, "page" : "1", "query" : MovieTitle, "year" : movieid['result']['item']["year"]})
             HTTPRequest            = urllib2.Request("https://api.themoviedb.org/3/search/movie", data=Query)
@@ -134,7 +134,7 @@ def getMovieIMDB():
                 HTTPRequest  = urllib2.Request("https://api.themoviedb.org/3/movie/%s?api_key=%s" % (TMDBId, TMDBApi))
                 HTTPResponse = urllib2.urlopen(HTTPRequest).read()
                 JSONContent  = json.loads(HTTPResponse);
-                if JSONContent.has_key("imdb_id"):
+                if "imdb_id" in JSONContent:
                     log("getMovieID: got IMDB ->%s<- from TMDB" % JSONContent["imdb_id"], "DEBUG")
                     return JSONContent["imdb_id"]
             return None
@@ -148,9 +148,9 @@ def getTVShowOrginalTitle(Title, ShowID):
     except Exception as e:
       log("xbmcOriginalTitle: TheTVDBToken failed: %s" % str(e))
       return normalizeString(Title)
-    print "https://api.thetvdb.com/series/%s" % ShowID
+    print("https://api.thetvdb.com/series/%s" % ShowID)
     HTTPRequest  = urllib2.Request("https://api.thetvdb.com/series/%s" % ShowID, headers={'Authorization' : 'Bearer %s' % TheTVDBToken})
-    print HTTPRequest
+    print(HTTPRequest)
     HTTPResponse = urllib2.urlopen(HTTPRequest).read()
 
     try:
@@ -158,7 +158,7 @@ def getTVShowOrginalTitle(Title, ShowID):
     except Exception as e:
       return normalizeString(Title)
 
-    if JSONContent.has_key("data"):
+    if "data" in JSONContent:
       OriginalTitle = JSONContent['data']['seriesName']
       log("getTVShowOrginalTitle: %s" % OriginalTitle, "DEBUG")
       return OriginalTitle
