@@ -50,14 +50,11 @@ def log(msg, logtype="DEBUG"):
         loglevel = xbmc.LOGNOTICE
     elif logtype == "ERROR":
         loglevel = xbmc.LOGERROR
-    reload(sys)
-    defaultencoding = sys.getdefaultencoding()
-    sys.setdefaultencoding('utf-8')
-    try:
-        xbmc.log((u"### [%s] - %s" % (__scriptname__, msg,)).encode('utf-8'),
-                 level=loglevel)
-    finally:
-        sys.setdefaultencoding(defaultencoding)
+    else:
+        loglevel = xbmc.LOGDEBUG
+    xbmc.log(
+        (u"### [%s] - %s" % (__scriptname__, msg,)).encode('utf-8'),
+        level=loglevel)
 
 
 def getTheTVDBToken():

@@ -144,13 +144,6 @@ class LegendasTV:
         s = s.title()
         return s
 
-    def _UNICODE(self, text):
-        if text:
-            return unicode(
-                BeautifulSoup(text, fromEncoding="utf-8", smartQuotesTo=None))
-        else:
-            return text
-
     def CalculateRatio(self, a, b):
         # Calculate the probability ratio and append the result
         counter = 0
