@@ -170,17 +170,17 @@ def Download(url, filename, pack, language):  # standard input
                                                   ".mov", ".mp4"]:
                         for x, s in subtitles:
                             se, fe = 0, 1
-                            if re.search("s\d{2}e\d{2}", s.lower()):
-                                se = re.findall("s\d{2}e\d{2}", s.lower())[0]
-                            if re.search("s\d{2}e\d{2}", f.lower()):
-                                fe = re.findall("s\d{2}e\d{2}", f.lower())[0]
+                            if re.search(r"s\d{2}e\d{2}", s.lower()):
+                                se = re.findall(r"s\d{2}e\d{2}", s.lower())[0]
+                            if re.search(r"s\d{2}e\d{2}", f.lower()):
+                                fe = re.findall(r"s\d{2}e\d{2}", f.lower())[0]
                             if se == fe:
                                 if os.path.basename(f) == os.path.basename(
                                         filename):
                                     outputSub.append(s)
                                 name = os.path.splitext(f)[0]
                                 ext = os.path.splitext(s)[1]
-                                lang = "pt" if re.search("Portuguese",
+                                lang = "pt" if re.search(r"Portuguese",
                                                          language) else "en"
                                 out = "%s.%s%s" % (name, lang, ext)
                                 xbmcvfs.copy(s, out)
@@ -208,7 +208,7 @@ def get_params(string=""):
     if len(paramstring) >= 2:
         params = paramstring
         cleanedparams = params.replace('?', '')
-        if (params[len(params) - 1] == '/'):
+        if params[len(params) - 1] == '/':
             params = params[0:len(params) - 2]
         pairsofparams = cleanedparams.split('&')
         param = {}
@@ -332,15 +332,15 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
         item['season'] = "0"
         item['episode'] = item['episode'][-1:]
 
-    if (item['file_original_path'].find("http") > -1):
+    if item['file_original_path'].find("http") > -1:
         item['temp'] = True
 
-    elif (item['file_original_path'].find("rar://") > -1):
+    elif item['file_original_path'].find("rar://") > -1:
         item['rar'] = True
         item['file_original_path'] = os.path.dirname(
             item['file_original_path'][6:])
 
-    elif (item['file_original_path'].find("stack://") > -1):
+    elif item['file_original_path'].find("stack://") > -1:
         stackPath = item['file_original_path'].split(" , ")
         item['file_original_path'] = stackPath[0][8:]
 

@@ -144,7 +144,7 @@ def getMovieIMDB():
             return movieid['result']['item']["imdbnumber"]
         elif "title" in movieid['result']['item'] and len(
                 movieid['result']['item']["title"]):
-            MovieTitle = movieid['result']['item']["title"].encode("utf-8");
+            MovieTitle = movieid['result']['item']["title"].encode("utf-8")
             Query = urllib.urlencode({
                 "api_key": TMDBApi,
                 "page": "1",
@@ -160,14 +160,14 @@ def getMovieIMDB():
             except Exception as e:
                 log("getMovieIMDB: TMDB download error: %s" % str(e))
 
-            JSONContent = json.loads(HTTPResponse);
+            JSONContent = json.loads(HTTPResponse)
             if len(JSONContent['results']):
                 TMDBId = JSONContent['results'][0]['id']
                 HTTPRequest = urllib2.Request(
                     "https://api.themoviedb.org/3/movie/%s?api_key=%s" % (
                         TMDBId, TMDBApi))
                 HTTPResponse = urllib2.urlopen(HTTPRequest).read()
-                JSONContent = json.loads(HTTPResponse);
+                JSONContent = json.loads(HTTPResponse)
                 if "imdb_id" in JSONContent:
                     log("getMovieID: got IMDB ->%s<- from TMDB" % JSONContent[
                         "imdb_id"], "DEBUG")
@@ -211,7 +211,7 @@ def getMovieOriginalTitle(Title, MovieID):
                 MovieID, TMDBApi))
         context = ssl._create_unverified_context()
         HTTPResponse = urllib2.urlopen(HTTPRequest, context=context).read()
-        JSONContent = json.loads(HTTPResponse);
+        JSONContent = json.loads(HTTPResponse)
         if len(JSONContent["movie_results"]):
             return normalizeString(
                 JSONContent["movie_results"][0]['original_title'].encode(
@@ -223,9 +223,9 @@ def getMovieOriginalTitle(Title, MovieID):
 def isStacked(subA, subB):
     subA, subB = re.escape(subA), re.escape(subB)
     regexesStacked = [
-        "(.*?)([ _.-]*(?:cd|dvd|p(?:ar)?t|dis[ck]|d)[ _.-]*[0-9]+)(.*?)(\.[^.]+)$",
-        "(.*?)([ _.-]*(?:cd|dvd|p(?:ar)?t|dis[ck]|d)[ _.-]*[a-d])(.*?)(\.[^.]+)$",
-        "(.*?)([ ._-]*[a-d])(.*?)(\.[^.]+)$"]
+        r"(.*?)([ _.-]*(?:cd|dvd|p(?:ar)?t|dis[ck]|d)[ _.-]*[0-9]+)(.*?)(\.[^.]+)$",
+        r"(.*?)([ _.-]*(?:cd|dvd|p(?:ar)?t|dis[ck]|d)[ _.-]*[a-d])(.*?)(\.[^.]+)$",
+        r"(.*?)([ ._-]*[a-d])(.*?)(\.[^.]+)$"]
     for regex in regexesStacked:
         if re.search(subA, regex):
             fnA, diskA, otherA, extA = re.findall(regex, subA)[0]

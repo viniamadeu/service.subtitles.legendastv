@@ -17,9 +17,9 @@ from threading import Thread
 # Service variables
 sub_ext = 'srt aas ssa sub smi'
 global regex_1, regex_2, regex_3
-regex_1 = "<div class=\"([^\"]*?)\">\s*?<span class=\"number .*?<div class=\"f_left\"><p><a href=\"([^\"]*)\">([^<]*)</a></p><p class=\"data\">.*?downloads, nota (\d*?),.*?<img .*? title=\"([^\"]*)\" /></div>"
-regex_2 = "class=\"load_more\""
-regex_3 = "<button class=\"icon_arrow\" onclick=\"window.open\(\'([^\']*?)\', \'_self\'\)\">DOWNLOAD</button>"
+regex_1 = r"<div class=\"([^\"]*?)\">\s*?<span class=\"number .*?<div class=\"f_left\"><p><a href=\"([^\"]*)\">([^<]*)</a></p><p class=\"data\">.*?downloads, nota (\d*?),.*?<img .*? title=\"([^\"]*)\" /></div>"
+regex_2 = r"class=\"load_more\""
+regex_3 = r"<button class=\"icon_arrow\" onclick=\"window.open\(\'([^\']*?)\', \'_self\'\)\">DOWNLOAD</button>"
 
 LANGUAGES = (
 
@@ -126,21 +126,21 @@ class LegendasTV:
                 return self.cookie
 
     def chomp(self, s):
-        s = re.sub("\s{2,20}", " ", s)
-        a = re.compile("(\r|\n|^\s|\s$|\'|\"|,|;|[(]|[)])")
-        b = re.compile("(\t|-|:|[/]|[?]|\[|\]|\.)")
-        s = b.sub(" ", s)
-        s = re.sub("[ ]{2,20}", " ", s)
-        s = a.sub("", s)
+        s = re.sub(r"\s{2,20}", " ", s)
+        a = re.compile(r"(\r|\n|^\s|\s$|\'|\"|,|;|[(]|[)])")
+        b = re.compile(r"(\t|-|:|[/]|[?]|\[|\]|\.)")
+        s = b.sub(r" ", s)
+        s = re.sub(r"[ ]{2,20}", " ", s)
+        s = a.sub(r"", s)
         return s
 
     def CleanLTVTitle(self, s):
-        s = re.sub("[(][0-9]{4}[)]$", "", s)
-        s = re.sub("[ ]?&[ ]?", " ", s)
-        s = re.sub("'", " ", s)
-        s = re.sub('\.(?!(\S[^. ])|\d)', '_', s)
+        s = re.sub(r"[(][0-9]{4}[)]$", "", s)
+        s = re.sub(r"[ ]?&[ ]?", " ", s)
+        s = re.sub(r"'", " ", s)
+        s = re.sub(r'\.(?!(\S[^. ])|\d)', '_', s)
         s = self.chomp(s)
-        s = re.sub("_", ".", s)
+        s = re.sub(r"_", ".", s)
         s = s.title()
         return s
 
@@ -162,7 +162,7 @@ class LegendasTV:
             else:
                 Ratio = "%.2f" % float(0)
         else:
-            if re.search("(^|\s)%s(\s|$)" % re.escape(Paradigm), Guess, re.I):
+            if re.search(r"(^|\s)%s(\s|$)" % re.escape(Paradigm), Guess, re.I):
                 Ratio = "%.2f" % float(1)
             else:
                 Ratio = "%.2f" % float(0)
@@ -288,9 +288,9 @@ class LegendasTV:
                 if 'Filme' in R and 'dsc_nome' in R['Filme']:
                     LTVTitle = self.CleanLTVTitle(R['Filme']['dsc_nome'])
                     TitleBR = R['Filme']['dsc_nome_br']
-                    if re.findall(".*? - (\d{1,2}).*?emporada", TitleBR):
+                    if re.findall(r".*? - (\d{1,2}).*?emporada", TitleBR):
                         LTVSeason = \
-                            re.findall(".*? - (\d{1,2}).*?emporada", TitleBR)[0]
+                            re.findall(r".*? - (\d{1,2}).*?emporada", TitleBR)[0]
                     ContentID = R['Filme']['id_filme']
                     # Calculate the probability ratio and append the result
                     Ratio = self.CalculateRatio(LTVTitle, SearchTitle)
@@ -383,15 +383,15 @@ class LegendasTV:
                 release = normalizeString(content[2])
                 rating = content[3]
                 lang = normalizeString(content[4])
-                if re.search("Portugues-BR", lang):
+                if re.search(r"Portugues-BR", lang):
                     LanguageId = "pb"
-                elif re.search("Portugues-PT", lang):
+                elif re.search(r"Portugues-PT", lang):
                     LanguageId = "pt"
-                elif re.search("Ingles", lang):
+                elif re.search(r"Ingles", lang):
                     LanguageId = "en"
-                elif re.search("Espanhol", lang):
+                elif re.search(r"Espanhol", lang):
                     LanguageId = "es"
-                elif re.search("Frances", lang):
+                elif re.search(r"Frances", lang):
                     LanguageId = "fr"
                 else:
                     continue
@@ -515,22 +515,22 @@ class LegendasTV:
             Episodes, Packs = [], []
             for DownloadsResult in self.DownloadsResults:
                 if DownloadsResult["type"] == "pack":
-                    if re.search("\(PACK", DownloadsResult["filename"]):
-                        DownloadsResult["filename"] = re.sub("\(PACK[^\)]*?\)",
+                    if re.search(r"\(PACK", DownloadsResult["filename"]):
+                        DownloadsResult["filename"] = re.sub(r"\(PACK[^\)]*?\)",
                                                              "",
                                                              DownloadsResult[
                                                                  "filename"])
-                    if re.search("\([Pp]\)", DownloadsResult["filename"]):
-                        DownloadsResult["filename"] = re.sub("\([Pp]\)", "",
+                    if re.search(r"\([Pp]\)", DownloadsResult["filename"]):
+                        DownloadsResult["filename"] = re.sub(r"\([Pp]\)", "",
                                                              DownloadsResult[
                                                                  "filename"])
                     DownloadsResult["filename"] = "(PACK) " + DownloadsResult[
                         "filename"]
                     Packs.append(DownloadsResult)
-                elif re.search("[Ss]%.2d[Ee]%.2d" % (int(Season), int(Episode)),
+                elif re.search(r"[Ss]%.2d[Ee]%.2d" % (int(Season), int(Episode)),
                                DownloadsResult["filename"]):
                     Episodes.append(DownloadsResult)
-                elif re.search("x%.2d" % (int(Episode)),
+                elif re.search(r"x%.2d" % (int(Episode)),
                                DownloadsResult["filename"]):
                     Episodes.append(DownloadsResult)
                 else:
