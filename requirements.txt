@@ -1,0 +1,3 @@
+# useful stub if you're coding this with an IDE
+kodistubs==18.0.0
+future==0.17.1
