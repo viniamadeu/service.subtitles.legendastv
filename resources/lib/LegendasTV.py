@@ -275,7 +275,7 @@ class LegendasTV:
         if not len(allResults):
             self.Log("Extending results...")
             Response = self._urlopen(
-                "http://minister.legendas.tv/util/busca_titulo/" + urllib.quote_plus(
+                "http://legendas.tv/util/busca_titulo/" + urllib.quote_plus(
                     SearchString))
             Response = json.loads(
                 unicode(Response.read(), 'utf-8', errors='ignore'))
@@ -364,7 +364,7 @@ class LegendasTV:
         self.Log("Message: Retrieving page [%s] for Movie[%s], Id[%s]." % (
             Page, MainID["title"], MainID["id"]))
 
-        #        Response = self._urlopen("http://minister.legendas.tv/util/carrega_legendas_busca/page:%s/id_filme:%s" % (Page, MainID["id"]))
+        #        Response = self._urlopen("http://legendas.tv/util/carrega_legendas_busca/page:%s/id_filme:%s" % (Page, MainID["id"]))
         Response = self._urlopen(
             "http://legendas.tv/legenda/busca/-/-/-/%s/%s" % (
                 Page, MainID["id"])).read()
