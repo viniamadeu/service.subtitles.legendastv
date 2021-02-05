@@ -127,8 +127,8 @@ class LegendasTV:
 
     def chomp(self, s):
         s = re.sub(r"\s{2,20}", " ", s)
-        a = re.compile(r"(\r|\n|^\s|\s$|\'|\"|,|;|[(]|[)])")
-        b = re.compile(r"(\t|-|:|[/]|[?]|\[|\]|\.)")
+        a = re.compile(r"(\r|\n|^\s|\s$|'|\"|,|;|[(]|[)])")
+        b = re.compile(r"(\t|-|:|[/]|[?]|\[|]|\.)")
         s = b.sub(r" ", s)
         s = re.sub(r"[ ]{2,20}", " ", s)
         s = a.sub(r"", s)
