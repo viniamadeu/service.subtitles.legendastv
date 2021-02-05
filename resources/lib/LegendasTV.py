@@ -516,7 +516,7 @@ class LegendasTV:
             for DownloadsResult in self.DownloadsResults:
                 if DownloadsResult["type"] == "pack":
                     if re.search(r"\(PACK", DownloadsResult["filename"]):
-                        DownloadsResult["filename"] = re.sub(r"\(PACK[^\)]*?\)",
+                        DownloadsResult["filename"] = re.sub(r"\(PACK[^)]*?\)",
                                                              "",
                                                              DownloadsResult[
                                                                  "filename"])
