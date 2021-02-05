@@ -19,9 +19,9 @@
     <license>GPL-3.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=360127</forum>
     <source>https://github.com/andrebrait/service.subtitles.legendastv</source>
+    <assets>
+      <icon>icon.png</icon>
+      <clearlogo>logo.png</clearlogo>
+    </assets>
   </extension>
-  <assets>
-    <icon>icon.png</icon>
-    <clearlogo>logo.png</clearlogo>
-  </assets>
 </addon>
