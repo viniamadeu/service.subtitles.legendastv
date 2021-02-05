@@ -1,6 +1,7 @@
 2.4.4
 - Use quote_plus to encode URL
 - Fix: 'str' object has no attribute 'read'
+- Fix: incorrect domain name for searching
 
 2.4.3
 - Add: Lots of debug info
