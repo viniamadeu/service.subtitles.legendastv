@@ -19,7 +19,7 @@ sub_ext = 'srt aas ssa sub smi'
 global regex_1, regex_2, regex_3
 regex_1 = r"<div class=\"([^\"]*?)\">\s*?<span class=\"number .*?<div class=\"f_left\"><p><a href=\"([^\"]*)\">([^<]*)</a></p><p class=\"data\">.*?downloads, nota (\d*?),.*?<img .*? title=\"([^\"]*)\" /></div>"
 regex_2 = r"class=\"load_more\""
-regex_3 = r"<button class=\"icon_arrow\" onclick=\"window.open\(\'([^\']*?)\', \'_self\'\)\">DOWNLOAD</button>"
+regex_3 = r"<button class=\"icon_arrow\" onclick=\"window.open\('([^']*?)', '_self'\)\">DOWNLOAD</button>"
 
 LANGUAGES = (
 
