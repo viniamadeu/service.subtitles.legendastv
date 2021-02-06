@@ -1,2 +1,0 @@
-# useful stub if you're coding this with an IDE
-kodistubs==18.0.0
