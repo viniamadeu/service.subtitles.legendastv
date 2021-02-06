@@ -440,7 +440,7 @@ class LegendasTV:
         startTime = time.time()
         filteredResults, self.DownloadsResults, self.Languages = [], [], []
         Movie, TVShow, Year, Season, Episode, IMDB = "", "", 0, 0, 0, ""
-        for key, value in kargs.items():
+        for key, value in list(kargs.items()):
             if key == "title":
                 Movie = self.CleanLTVTitle(value)
             if key == "tvshow":
