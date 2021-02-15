@@ -6,7 +6,6 @@
    provider-name="gfjardim,andrebrait">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
-    <import addon="vfs.libarchive" version="1.0.5" />
   </requires>
   <extension point="xbmc.subtitle.module" library="service.py" />
   <extension point="xbmc.addon.metadata">
