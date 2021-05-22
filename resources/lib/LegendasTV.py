@@ -3,14 +3,14 @@
 # This program is distributed under the terms of the GNU General Public License, version 3.
 # http://www.gnu.org/licenses/gpl.txt
 
-import cookielib
+import http.cookiejar
 import json
 import math
 import re
 import time
 import unicodedata
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 from operator import itemgetter
 from threading import Thread
 
@@ -47,10 +47,10 @@ def languageTranslate(lang, lang_from, lang_to):
 def normalizeString(obj):
     try:
         return unicodedata.normalize('NFKD',
-                                     unicode(unicode(obj, 'utf-8'))).encode(
+                                     str(str(obj, 'utf-8'))).encode(
             'ascii', 'ignore')
     except:
-        return unicode(str(obj).encode('string_escape'))
+        return str(str(obj).encode('string_escape'))
 
 
 class LTVThread(Thread):
@@ -89,38 +89,38 @@ class LegendasTV:
         self.cookie = ""
 
     def Log(self, message, logtype="NOTICE"):
-        print("####  %s: %s" % (logtype, message.encode("utf-8")))
+        print(("####  %s: %s" % (logtype, message.encode("utf-8"))))
 
     def _urlopen(self, request):
         try:
             self.Log("Opening URL: (%s)" % request, "DEBUG")
-            return urllib2.urlopen(request, timeout=15)
-        except urllib2.URLError as e:
+            return urllib.request.urlopen(request, timeout=15)
+        except urllib.error.URLError as e:
             self.Log("Website (%s) could not be reached due to error: %s" % (
                 request, str(e)), "ERROR")
             return ""
 
     def login(self, username, password):
         if self.cookie:
-            opener = urllib2.build_opener(
-                urllib2.HTTPCookieProcessor(self.cookie))
-            urllib2.install_opener(opener)
+            opener = urllib.request.build_opener(
+                urllib.request.HTTPCookieProcessor(self.cookie))
+            urllib.request.install_opener(opener)
             return self.cookie
         else:
-            self.cookie = cookielib.CookieJar()
-            opener = urllib2.build_opener(
-                urllib2.HTTPCookieProcessor(self.cookie))
-            urllib2.install_opener(opener)
-            login_data = urllib.urlencode({
+            self.cookie = http.cookiejar.CookieJar()
+            opener = urllib.request.build_opener(
+                urllib.request.HTTPCookieProcessor(self.cookie))
+            urllib.request.install_opener(opener)
+            login_data = urllib.parse.urlencode({
                 '_method': 'POST',
                 'data[User][username]': username,
                 'data[User][password]': password
             })
-            request = urllib2.Request("http://legendas.tv/login", login_data)
-            response = normalizeString(urllib2.urlopen(request).read())
-            if response.__contains__(u'Usuário ou senha inválidos'):
+            request = urllib.request.Request("http://legendas.tv/login", login_data)
+            response = normalizeString(urllib.request.urlopen(request).read())
+            if response.__contains__('Usuário ou senha inválidos'):
                 self.Log(
-                    u" Login Failed. Check your data at the addon configuration.")
+                    " Login Failed. Check your data at the addon configuration.")
                 return None
             else:
                 return self.cookie
@@ -175,25 +175,25 @@ class LegendasTV:
         for key in keys.split():
             if key not in obj[0]:
                 continue
-            maximum = max(len(unicode(k[key])) for k in obj)
+            maximum = max(len(str(k[key])) for k in obj)
             maximum = max(maximum + 2, len(key) + 2)
             if maximum > maxsize:
                 maximum = maxsize
-            Content = Content + "%s" % unicode(key)[:maxsize - 2].ljust(maximum)
+            Content = Content + "%s" % str(key)[:maxsize - 2].ljust(maximum)
         self.Log(Content)
         for x, Result in enumerate(obj):
             Content = ""
             for key in keys.split():
                 if key not in obj[0]:
                     continue
-                value = unicode(Result[key])
+                value = str(Result[key])
                 if not len(value):
                     continue
-                maximum = max(len(unicode(k[key])) for k in obj)
+                maximum = max(len(str(k[key])) for k in obj)
                 maximum = max(maximum + 2, len(key) + 2)
                 if maximum > maxsize:
                     maximum = maxsize
-                Content = Content + "%s" % unicode(value)[:maxsize - 2].ljust(
+                Content = Content + "%s" % str(value)[:maxsize - 2].ljust(
                     maximum)
             self.Log(Content)
             if x > 30:
@@ -219,7 +219,7 @@ class LegendasTV:
             # print("fromBegin[%s] fromEnd[%s]" % (fromBegin, fromEnd))
             for search in [fromBegin, fromEnd]:
                 if len(search):
-                    url = "http://legendas.tv/legenda/sugestao/" + urllib.quote_plus(
+                    url = "http://legendas.tv/legenda/sugestao/" + urllib.parse.quote_plus(
                         search)
                     current = FuncThread(target=self._urlopen, args=(url,))
                     current.start()
@@ -229,7 +229,7 @@ class LegendasTV:
                 try:
                     # Try if thread result is a valid JSON string
                     contents = json.loads(
-                        unicode(thread.join().read(), 'utf-8', errors='ignore'))
+                        str(thread.join().read(), 'utf-8', errors='ignore'))
                     for content in contents:
                         JSONContent.append(content)
                 except:
@@ -275,10 +275,10 @@ class LegendasTV:
         if not len(allResults):
             self.Log("Extending results...")
             Response = self._urlopen(
-                "http://legendas.tv/util/busca_titulo/" + urllib.quote_plus(
+                "http://legendas.tv/util/busca_titulo/" + urllib.parse.quote_plus(
                     SearchString))
             Response = json.loads(
-                unicode(Response.read(), 'utf-8', errors='ignore'))
+                str(Response.read(), 'utf-8', errors='ignore'))
             # Load the results
             # Parse and filter the results
             self.Log(
