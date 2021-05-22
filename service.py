@@ -97,8 +97,8 @@ def Search(item):  # standard input
             'searchstring'] if "searchstring" in item else ""
         url = "plugin://%s/?action=search&original_title=true&languages=%s%s" % (
             __scriptid__,
-            urllib.quote(",".join(item["languages"])),
-            urllib.quote(searchstring)
+            urllib.parse.quote(",".join(item["languages"])),
+            urllib.parse.quote(searchstring)
         )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url,
                                     listitem=listitem, isFolder=False)
@@ -133,7 +133,7 @@ def Download(url, filename, pack, language):  # standard input
     with open(fname, 'wb') as f:
         f.write(FileContent)
 
-    translated_archive_url = 'archive://%s' % urllib.quote_plus(
+    translated_archive_url = 'archive://%s' % urllib.parse.quote_plus(
         xbmc.translatePath(fname))
     extractedFileList, success = extractArchiveToFolder(translated_archive_url,
                                                         extractPath)
@@ -142,7 +142,7 @@ def Download(url, filename, pack, language):  # standard input
 
     temp = []
     for file in files:
-        sub = urllib.unquote_plus(file)
+        sub = urllib.parse.unquote_plus(file)
         sub, ext = os.path.splitext(os.path.basename(file))
         sub_striped = LTV.CleanLTVTitle(sub)
         Ratio = LTV.CalculateRatio(sub_striped, LTV.CleanLTVTitle(filename))
@@ -163,7 +163,7 @@ def Download(url, filename, pack, language):  # standard input
 
             # Handling package import
             if subtitles[sel][0] == "pack":
-                dir = os.path.dirname(urllib.unquote(
+                dir = os.path.dirname(urllib.parse.unquote(
                     xbmc.Player().getPlayingFile().decode('utf-8')))
                 for f in xbmc_walk(dir):
                     if os.path.splitext(f)[1] in [".mkv", ".avi", ".vob",
@@ -255,12 +255,12 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
         xbmc.getInfoLabel("VideoPlayer.TVshowtitle"))  # Show
     item['title'] = normalizeString(xbmc.getInfoLabel(
         "VideoPlayer.OriginalTitle"))  # try to get original title
-    item['file_original_path'] = urllib.unquote(
+    item['file_original_path'] = urllib.parse.unquote(
         xbmc.Player().getPlayingFile().decode(
             'utf-8'))  # Full path of a playing file
     item['languages'] = []  # ['scc','eng']
     item["languages"].extend(
-        urllib.unquote(params['languages']).decode('utf-8').split(","))
+        urllib.parse.unquote(params['languages']).decode('utf-8').split(","))
     item["original_title"] = "true" if "original_title" in params else "false"
 
     if not item['title']:
@@ -279,7 +279,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
             item['title'] = getMovieOriginalTitle(item["title"], item["imdb"])
 
     if 'searchstring' in params:
-        item["searchstring"] = urllib.unquote(params['searchstring'])
+        item["searchstring"] = urllib.parse.unquote(params['searchstring'])
         if item['tvshow']:
             item['tvshow'] = item["searchstring"]
         elif item['title']:
@@ -288,38 +288,38 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
     langtemp = []
     for lang in item["languages"]:
         if __search__ == '0':
-            if lang == u"Portuguese (Brazil)":
+            if lang == "Portuguese (Brazil)":
                 langtemp.append((0, lang))
-            elif lang == u"Portuguese":
+            elif lang == "Portuguese":
                 langtemp.append((1, lang))
-            elif lang == u"English":
+            elif lang == "English":
                 langtemp.append((2, lang))
             else:
                 langtemp.append((3, lang))
         elif __search__ == '1':
-            if lang == u"Portuguese (Brazil)":
+            if lang == "Portuguese (Brazil)":
                 langtemp.append((1, lang))
-            elif lang == u"Portuguese":
+            elif lang == "Portuguese":
                 langtemp.append((0, lang))
-            elif lang == u"English":
+            elif lang == "English":
                 langtemp.append((2, lang))
             else:
                 langtemp.append((3, lang))
         elif __search__ == '2':
-            if lang == u"Portuguese (Brazil)":
+            if lang == "Portuguese (Brazil)":
                 langtemp.append((1, lang))
-            elif lang == u"Portuguese":
+            elif lang == "Portuguese":
                 langtemp.append((2, lang))
-            elif lang == u"English":
+            elif lang == "English":
                 langtemp.append((0, lang))
             else:
                 langtemp.append((3, lang))
         elif __search__ == '3':
-            if lang == u"Portuguese (Brazil)":
+            if lang == "Portuguese (Brazil)":
                 langtemp.append((1, lang))
-            elif lang == u"Portuguese":
+            elif lang == "Portuguese":
                 langtemp.append((2, lang))
-            elif lang == u"English":
+            elif lang == "English":
                 langtemp.append((3, lang))
             else:
                 langtemp.append((0, lang))
